@@ -143,6 +143,11 @@ create policy "Users can update own profile"
   on profiles for update
   using (auth.uid() = id);
 
+drop policy if exists "Admins can update any profile" on profiles;
+create policy "Admins can update any profile"
+  on profiles for update
+  using (exists (select 1 from profiles p where p.id = auth.uid() and p.is_admin = true));
+
 -- ---- Donors ----
 drop policy if exists "Approved donors are viewable by everyone" on donors;
 drop policy if exists "Admins can view all donors" on donors;

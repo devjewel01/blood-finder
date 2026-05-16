@@ -8,7 +8,7 @@ import {
   type AdminUser,
   type PendingDonor,
 } from '@/types'
-import { DonorApprovalActions } from './_components'
+import { DonorApprovalActions, UserAdminToggle } from './_components'
 
 export default async function AdminPage() {
   const supabase = await createClient()
@@ -151,12 +151,18 @@ export default async function AdminPage() {
                 </p>
                 <p className="text-xs text-gray-400 truncate">{u.email}</p>
               </div>
-              <div className="flex items-center gap-2 whitespace-nowrap">
+              <div className="flex items-center gap-3 whitespace-nowrap">
                 {u.is_admin && (
                   <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
                     Admin
                   </span>
                 )}
+                <UserAdminToggle
+                  userId={u.id}
+                  userName={u.full_name || u.email}
+                  isAdmin={u.is_admin}
+                  isSelf={u.id === user.id}
+                />
                 <span className="text-xs text-gray-400">
                   {new Date(u.created_at).toLocaleDateString()}
                 </span>
