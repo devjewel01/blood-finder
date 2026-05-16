@@ -189,6 +189,7 @@ create policy "Admins can delete donors"
 drop policy if exists "Users can view own requests" on blood_requests;
 drop policy if exists "Admins can view all requests" on blood_requests;
 drop policy if exists "Logged in users can create requests" on blood_requests;
+drop policy if exists "Requesters can cancel own pending requests" on blood_requests;
 drop policy if exists "Donors and admins can update requests" on blood_requests;
 
 create policy "Users can view own requests"
