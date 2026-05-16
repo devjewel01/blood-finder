@@ -37,6 +37,9 @@ yarn-error.log*
 # SQLite
 *.db
 
+# Playwright
+.playwright-mcp/
+
 # vercel
 .vercel
 
