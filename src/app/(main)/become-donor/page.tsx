@@ -123,7 +123,7 @@ export default function BecomeDonorPage() {
       return
     }
 
-    router.push('/dashboard')
+    router.push('/dashboard?flash=donor-pending')
     router.refresh()
   }
 

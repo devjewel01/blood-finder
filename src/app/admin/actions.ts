@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -20,12 +21,14 @@ export async function approveDonor(donorId: string) {
   const { supabase } = await requireAdmin()
   await supabase.from('donors').update({ is_approved: true }).eq('id', donorId)
   revalidatePath('/admin')
+  redirect('/admin?flash=donor-approved')
 }
 
 export async function rejectDonor(donorId: string) {
   const { supabase } = await requireAdmin()
   await supabase.from('donors').delete().eq('id', donorId)
   revalidatePath('/admin')
+  redirect('/admin?flash=donor-rejected')
 }
 
 export async function setUserAdmin(userId: string, makeAdmin: boolean) {
@@ -35,4 +38,5 @@ export async function setUserAdmin(userId: string, makeAdmin: boolean) {
   }
   await supabase.from('profiles').update({ is_admin: makeAdmin }).eq('id', userId)
   revalidatePath('/admin')
+  redirect(`/admin?flash=${makeAdmin ? 'admin-granted' : 'admin-revoked'}`)
 }

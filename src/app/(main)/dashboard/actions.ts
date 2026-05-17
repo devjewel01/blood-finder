@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { todayIsoDate } from '@/lib/eligibility'
 import type { AvailabilityStatus } from '@/types'
 
@@ -14,6 +15,9 @@ export async function toggleAvailability(donorId: string, currentStatus: Availab
     .update({ availability_status: newStatus })
     .eq('id', donorId)
   revalidatePath('/dashboard')
+  redirect(
+    `/dashboard?flash=${newStatus === 'AVAILABLE' ? 'availability-on' : 'availability-off'}`,
+  )
 }
 
 export async function cancelRequest(requestId: string) {
@@ -23,6 +27,7 @@ export async function cancelRequest(requestId: string) {
     .update({ status: 'CANCELLED' })
     .eq('id', requestId)
   revalidatePath('/dashboard')
+  redirect('/dashboard?flash=request-cancelled')
 }
 
 export async function acceptRequest(requestId: string, donorId: string) {
@@ -56,6 +61,7 @@ export async function acceptRequest(requestId: string, donorId: string) {
     .eq('id', donorId)
 
   revalidatePath('/dashboard')
+  redirect('/dashboard?flash=request-accepted')
 }
 
 export async function declineRequest(requestId: string) {
@@ -65,4 +71,5 @@ export async function declineRequest(requestId: string) {
     .update({ status: 'CANCELLED' })
     .eq('id', requestId)
   revalidatePath('/dashboard')
+  redirect('/dashboard?flash=request-declined')
 }
